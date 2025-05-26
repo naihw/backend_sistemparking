@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Parking System - Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f6f8;
+      color: #333;
+    }
+    header {
+      background-color: #2c3e50;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+    #logout-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      background: #e74c3c;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    h1, h2 {
+      margin-bottom: 1rem;
+    }
+    .slot-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 1rem;
+    }
+    .slot {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      user-select: none;
+    }
+    .slot:hover {
+      transform: scale(1.05);
+    }
+    .slot-status {
+      margin-top: 0.5rem;
+      font-weight: bold;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      color: white;
+      display: inline-block;
+      min-width: 80px;
+    }
+    .occupied {
+      background-color: #e74c3c;
+    }
+    .empty {
+      background-color: #27ae60;
+    }
+    #manage-section {
+      margin-top: 3rem;
+      background-color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    form {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    form input[type="text"] {
+      padding: 0.5rem;
+      font-size: 1rem;
+      flex-grow: 1;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    form button {
+      background-color: #2980b9;
+      border: none;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    form button:hover {
+      background-color: #1c5980;
+    }
+    ul.slot-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    ul.slot-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    ul.slot-list li:last-child {
+      border-bottom: none;
+    }
+    ul.slot-list button {
+      background-color: #e74c3c;
+      border: none;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    ul.slot-list button:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Smart Parking System - Admin Dashboard</h1>
+  <button id="logout-btn">Logout</button>
+</header>
+
+<main>
+  <section>
+    <h2>Dashboard Monitoring Parkir</h2>
+    <div class="slot-container" id="slot-container">
+      <!-- Slot parkir akan muncul di sini -->
+    </div>
+  </section>
+
+  <section id="manage-section">
+    <h2>Manajemen Slot Parkir</h2>
+    <form id="slot-form">
+      <input type="text" id="slot-name" placeholder="Nama slot parkir (contoh: A1)" required />
+      <button type="submit">Tambah Slot</button>
+    </form>
+    <ul class="slot-list" id="slot-list">
+      <!-- Daftar slot parkir -->
+    </ul>
+  </section>
+</main>
+
+<script>
+  // Cek login
+  if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+    window.location.href = 'login.html';
+  }
+
+  document.getElementById('logout-btn').addEventListener('click', () => {
+    sessionStorage.removeItem('isLoggedIn');
+    window.location.href = 'login.html';
+  });
+
+  // Data dummy awal slot parkir
+  let slots = [
+    { id: 1, name: 'A1', occupied: false },
+    { id: 2, name: 'A2', occupied: true },
+    { id: 3, name: 'B1', occupied: false },
+    { id: 4, name: 'B2', occupied: true },
+  ];
+
+  const slotContainer = document.getElementById('slot-container');
+  const slotList = document.getElementById('slot-list');
+  const slotForm = document.getElementById('slot-form');
+  const slotNameInput = document.getElementById('slot-name');
+
+  // Render dashboard slot parkir
+  function renderSlots() {
+    slotContainer.innerHTML = '';
+    slots.forEach(slot => {
+      const slotDiv = document.createElement('div');
+      slotDiv.classList.add('slot');
+      slotDiv.innerHTML = `
+        <div><strong>${slot.name}</strong></div>
+        <div class="slot-status ${slot.occupied ? 'occupied' : 'empty'}">
+          ${slot.occupied ? 'Terisi' : 'Kosong'}
+        </div>
+      `;
+      slotDiv.onclick = () => toggleSlotStatus(slot.id);
+      slotContainer.appendChild(slotDiv);
+    });
+  }
+
+  // Render list manajemen slot
+  function renderSlotList() {
+    slotList.innerHTML = '';
+    slots.forEach(slot => {
+      const li = document.createElement('li');
+      li.textContent = `${slot.name} - ${slot.occupied ? 'Terisi' : 'Kosong'}`;
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'Hapus';
+      delBtn.onclick = () => deleteSlot(slot.id);
+      li.appendChild(delBtn);
+      slotList.appendChild(li);
+    });
+  }
+
+  // Toggle status slot (occupied / empty)
+  function toggleSlotStatus(id) {
+    slots = slots.map(slot =>
+      slot.id === id ? {...slot, occupied: !slot.occupied} : slot
+    );
+    renderSlots();
+    renderSlotList();
+  }
+
+  // Tambah slot baru
+  slotForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const newName = slotNameInput.value.trim();
+    if (!newName) return alert('Nama slot tidak boleh kosong');
+
+    // Cek apakah sudah ada nama slot yang sama
+    if (slots.some(s => s.name.toLowerCase() === newName.toLowerCase())) {
+      alert('Slot dengan nama tersebut sudah ada');
+      return;
+    }
+
+    const newSlot = {
+      id: Date.now(),
+      name: newName,
+      occupied: false
+    };
+    slots.push(newSlot);
+    slotNameInput.value = '';
+    renderSlots();
+    renderSlotList();
+  });
+
+  // Hapus slot
+  function deleteSlot(id) {
+    if (confirm('Yakin ingin menghapus slot ini?')) {
+      slots = slots.filter(slot => slot.id !== id);
+      renderSlots();
+      renderSlotList();
+    }
+  }
+
+  // Render awal
+  renderSlots();
+  renderSlotList();
+
+</script>
+</body>
+</html>

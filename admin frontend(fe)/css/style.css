@@ -1,0 +1,237 @@
+/* GLOBAL RESET & BODY STYLING */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #4a90e2, rgb(101, 4, 185));
+    background-size: 600% 600%;
+    animation: gradientShift 16s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* CONTAINER LAYOUT */
+  .container {
+    display: flex;
+    width: 800px;
+    max-width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 
+                0 10px 10px rgba(0, 0, 0, 0.22);
+  }
+  
+  .form-container {
+    flex: 1;
+    padding: 50px;
+    background-color: #fff;
+    border-radius: 12px;
+  }
+  
+  .welcome-container {
+    flex: 1;
+    background: linear-gradient(to right, #00b386, #007d58);
+    color: #fff;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 9999;
+  }
+  
+  /* FORM ELEMENTS */
+  .input,
+  input {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  button.btn,
+  .ghost {
+    border: none;
+    padding: 12px 45px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 20px;
+    margin-top: 10px;
+    transition: 0.3s ease;
+  }
+  
+  .btn {
+    background-color: #00b386;
+    color: white;
+  }
+  
+  .btn:hover {
+    background-color: #00966e;
+  }
+  
+  .ghost {
+    background-color: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+  }
+  
+  .ghost:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* BUTTON VARIANTS */
+  .btn.danger,
+  .logout-btn {
+    background-color: #d9534f;
+    color: #fff;
+  }
+  
+  .btn.danger:hover,
+  .logout-btn:hover {
+    background-color: #b52a2a;
+  }
+  
+  .logout-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+  }
+  
+  /* DASHBOARD STYLING */
+  .dashboard-container {
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    max-width: 1100px;
+    width: 95%;
+    padding: 40px 50px;
+    margin: 40px auto;
+    position: relative;
+    padding:   150px 10% 50px;
+  }
+  
+  .dashboard-container h1 {
+    text-align: left;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* SLOT SECTION */
+  .slot-status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+  
+  .slot {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    color: white;
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  .kosong {
+    background-color: #28a745;
+  }
+  
+  .terisi {
+    background-color: #dc3545;
+  }
+  
+  /* STATISTICS SUMMARY */
+  .summary {
+    background: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  }
+  
+  /* SLOT MANAGEMENT */
+  .management h3 {
+    margin-bottom: 10px;
+  }
+  
+  .management input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 60%;
+    margin-right: 10px;
+  }
+  
+  .management button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .management button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* LIST SLOT */
+  .list-slot > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgb(94, 251, 58);
+    padding: 8px 12px;
+    margin-top: 8px;
+    border-radius: 5px;
+  }
+  
+  .list-slot button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .list-slot button:hover {
+    background-color: #b52a2a;
+  }
+  

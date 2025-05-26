@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <!-- Form Login/Register -->
+    <div class="form-container" id="auth-section">
+      <form id="auth-form">
+        <h2 id="form-title">Login Admin</h2>
+        <input type="text" id="name" placeholder="Nama" class="input" style="display: none" />
+        <input type="email" id="email" placeholder="Email" class="input" required />
+        <input type="password" id="password" placeholder="Password" class="input" required />
+        <button type="submit" class="btn">Login</button>
+        <p>
+          <span id="toggle-auth">Belum punya akun? Register</span>
+        </p>
+      </form>
+    </div>
+
+    <!-- Panel Sambutan -->
+    <div class="welcome-container">
+      <h1>Selamat Datang Kembali!</h1>
+    </div>
+  </div>
+
+  <!-- Dashboard (Setelah Login) -->
+  <div class="dashboard-container" id="dashboard-section" style="display: none">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h1>Welcome, <span id="admin-name">Admin</span> 👋</h1>
+      <button id="logout-btn" class="btn danger">Logout</button>
+    </div>
+
+    <!-- Statistik Slot -->
+    <div class="summary" style="margin-top: 20px;">
+      <p>Total Slot: <span id="total">0</span></p>
+      <p>Slot Kosong: <span id="kosong">0</span></p>
+      <p>Slot Terisi: <span id="terisi">0</span></p>
+      <button onclick="fetchSlotStatus()" class="btn">🔄 Refresh</button>
+    </div>
+
+    <!-- Tampilan Slot -->
+    <div class="slot-status" id="slotContainer">
+      <p>Memuat data slot...</p>
+    </div>
+  </div>
+
+  <!-- Script utama -->
+  <script src="js/admin.js"></script>
+</body>
+</html>

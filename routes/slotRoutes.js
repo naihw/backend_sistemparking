@@ -2,13 +2,22 @@ const express = require('express');
 const router = express.Router();
 const slotController = require('../controller/slotController');
 
-// Get all slots
+// GET semua slot
 router.get('/', slotController.getAllSlots);
 
-// Add new slot
-router.post('/add', slotController.addSlot);
+// GET slot by ID
+router.get('/:id', slotController.getSlotById);
 
-// Update slot status 
-router.put('/update-status', slotController.updateSlotStatus);
+// POST slot baru
+router.post('/', slotController.createSlot);
+
+// PUT update slot
+router.put('/:id', slotController.updateSlot);
+
+// DELETE slot
+router.delete('/:id', slotController.deleteSlot);
+
+//update slot terbaru
+router.put('/update', slotController.updateAvailableSlots);
 
 module.exports = router;

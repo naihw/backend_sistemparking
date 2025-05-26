@@ -2,23 +2,23 @@ const db = require('./db'); // Koneksi database
 const bcrypt = require('bcryptjs'); // Untuk mengenkripsi password
 const jwt = require('jsonwebtoken'); // Untuk membuat JWT token
 
-// Registrasi pengguna baru
-exports.registerUser = async (name, email, password) => {
+// Registrasi admin
+exports.registerAdmins = async (name, email, password) => {
   // Enkripsi password
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const query = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
+  const query = 'INSERT INTO admins (name, email, password) VALUES (?, ?, ?)';
   const values = [name, email, hashedPassword];
 
   try {
     const [result] = await db.execute(query, values);
-    return result.insertId; // Mengembalikan ID pengguna yang baru dibuat
+    return result.insertId; // Mengembalikan ID admin yang dibuat
   } catch (err) {
-    throw new Error('Error registering user');
+    throw new Error('Error registering admin');
   }
 };
 
-// Cek email pengguna yang sudah terdaftar
+// Cek email admin yang sudah terdaftar
 exports.findUserByEmail = async (email) => {
   const query = 'SELECT * FROM users WHERE email = ?';
   try {
