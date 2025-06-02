@@ -18,11 +18,16 @@ exports.updateSlotStatus = async (slot_id, status) => {
   return result.affectedRows > 0;
 };
 
-// Update jumlah slot tersedia global (misal id=1)
-exports.updateAvailableSlots = async (availableSlots) => {
-  const [result] = await db.query('UPDATE slots SET slot_number = ? WHERE id = 1', [availableSlots]);
+// Misal di models/slot.js
+exports.iotUpdateSlot = async (slot_number, is_occupied) => {
+  const [result] = await db.query(
+    'UPDATE slots SET is_occupied = ? WHERE slot_number = ?',
+    [is_occupied, slot_number]
+  );
   return result.affectedRows > 0;
 };
+
+
 
 exports.deleteSlot = async (id) => {
   const [result] = await db.query('DELETE FROM slots WHERE id = ?', [id]);

@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
 app.use('/api/slot', slotRoutes); 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/iot/update-slot', slotRoutes);  
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

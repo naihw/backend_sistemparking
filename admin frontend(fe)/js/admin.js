@@ -94,10 +94,7 @@ function loadSlotDashboard(token) {
         <input type="text" id="slotNumberInput" placeholder="Nomor Slot" />
         <button id="addSlotBtn">Tambah Slot</button>
       </div>
-      <div>
-        <input type="number" id="availableSlotsInput" min="0" placeholder="Jumlah Slot Tersedia" />
-        <button id="updateAvailableSlotsBtn">Update Jumlah Slot Tersedia</button>
-      </div>
+      
       <table border="1" style="width: 100%; margin-top: 15px;">
         <thead>
           <tr>
@@ -119,6 +116,7 @@ function loadSlotDashboard(token) {
   fetchSlots(token);
 }
 
+// Fungsi menampilkan slot di tabel
 async function fetchSlots(token) {
   try {
     const response = await fetch('http://localhost:3000/api/slot', {
@@ -131,14 +129,17 @@ async function fetchSlots(token) {
     tbody.innerHTML = '';
 
     slots.forEach(slot => {
+      const statusText = slot.is_occupied ? 'Terisi' : 'Kosong';
+      const toggleStatus = slot.is_occupied ? 0 : 1;
+
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${slot.id}</td>
         <td>${slot.slot_number}</td>
-        <td>${slot.status}</td>
+        <td>${statusText}</td>
         <td>
-          <button onclick="updateSlotStatus(${slot.id}, '${slot.status === 'available' ? 'occupied' : 'available'}', '${token}')">
-            Ubah ke ${slot.status === 'available' ? 'occupied' : 'available'}
+          <button onclick="updateSlotStatus(${slot.id}, ${toggleStatus}, '${token}')">
+            Ubah ke ${toggleStatus ? 'Terisi' : 'Kosong'}
           </button>
           <button onclick="deleteSlot(${slot.id}, '${token}')" style="color: red;">
             Hapus
@@ -152,6 +153,7 @@ async function fetchSlots(token) {
   }
 }
 
+// Fungsi tambah slot baru
 async function addSlot(token) {
   const slotNumber = document.getElementById('slotNumberInput').value.trim();
   if (!slotNumber) {
@@ -178,15 +180,16 @@ async function addSlot(token) {
   }
 }
 
+// Fungsi update status slot
 async function updateSlotStatus(id, newStatus, token) {
   try {
-    const response = await fetch(`http://localhost:3000/api/slot/update${id}`, {
+    const response = await fetch(`http://localhost:3000/api/slot/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ status: newStatus }),
+      body: JSON.stringify({ is_occupied: newStatus }), // Kirim 0 atau 1
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || 'Gagal memperbarui status.');
@@ -214,30 +217,6 @@ async function deleteSlot(id, token) {
   }
 }
 
-async function updateAvailableSlots(token) {
-  const availableSlots = parseInt(document.getElementById('availableSlotsInput').value, 10);
-  if (isNaN(availableSlots) || availableSlots < 0) {
-    alert('Masukkan jumlah slot tersedia yang valid.');
-    return;
-  }
-
-  try {
-    const response = await fetch('http://localhost:3000/api/slot/available', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ availableSlots }),
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || 'Gagal update.');
-    alert(data.message);
-    document.getElementById('availableSlotsInput').value = '';
-  } catch (err) {
-    alert(err.message);
-  }
-}
 
 // Logout
 document.getElementById('logout-btn').addEventListener('click', () => {

@@ -35,9 +35,10 @@ exports.createSlot = async (req, res) => {
 
 exports.updateSlot = async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { is_occupied } = req.body;
+
   try {
-    const updated = await Slot.updateSlotStatus(id, status);
+    const updated = await Slot.updateSlotStatus(id, is_occupied);
     if (updated) {
       res.json({ message: 'Slot berhasil diperbarui' });
     } else {
@@ -47,6 +48,8 @@ exports.updateSlot = async (req, res) => {
     res.status(500).json({ message: 'Gagal memperbarui slot parkir' });
   }
 };
+
+
 
 exports.deleteSlot = async (req, res) => {
   const { id } = req.params;
@@ -62,19 +65,18 @@ exports.deleteSlot = async (req, res) => {
   }
 };
 
-exports.updateAvailableSlots = async (req, res) => {
-  const { availableSlots } = req.body;
-  if (typeof availableSlots === 'undefined') {
-    return res.status(400).json({ message: 'availableSlots diperlukan' });
-  }
+exports.iotUpdateSlot = async (req, res) => {
+  const { slot_number, is_occupied } = req.body;
   try {
-    const updated = await Slot.updateAvailableSlots(availableSlots);
-    if (!updated) {
-      return res.status(404).json({ message: 'Gagal memperbarui jumlah slot tersedia' });
+    const updated = await Slot.iotUpdateSlot(slot_number, is_occupied);
+    if (updated) {
+      res.json({ message: 'Status slot diperbarui oleh IoT' });
+    } else {
+      res.status(404).json({ message: 'Slot tidak ditemukan' });
     }
-    res.json({ message: "Jumlah slot tersedia berhasil diperbarui", availableSlots });
   } catch (err) {
-    res.status(500).json({ message: "Gagal update slot" });
+    res.status(500).json({ message: 'Gagal memperbarui slot (IoT)' });
   }
 };
+
 
